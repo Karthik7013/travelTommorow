@@ -726,47 +726,41 @@ const Form2 = ({ setStage, setQuoteData }) => {
     const today = new Date();
     const startDate = new Date(value);
 
-    // Check if startDate is today or later
     if (startDate < today) {
       return "Start Date must be today or later";
     }
 
-    // Calculate maximum date allowed (180 days from today)
     const maxDate = new Date(today);
     maxDate.setDate(today.getDate() + 180);
 
-    // Check if startDate is more than 180 days from today
     if (startDate > maxDate) {
       return "Start Date must be within the next 180 days";
     }
-
-    // Return undefined if validation passes
     return undefined;
   };
 
   const validateEndDate = (value) => {
-    const startDate = new Date(getValues('startDate')); // Access startDate from form values
+    const startDate = new Date(getValues('startDate'));
     const endDate = new Date(value);
-
-    // Check if endDate is before startDate
     if (endDate < startDate) {
       return "End Date must be after Start Date";
     }
-
-    // Calculate maxDate (365 days from startDate)
     const maxDate = new Date(startDate);
     maxDate.setDate(startDate.getDate() + 365);
-
-    // Check if endDate exceeds maxDate
     if (endDate > maxDate) {
       return "End Date must be within 365 days from Start Date";
     }
-
-    // Return undefined if validation passes
     return undefined;
   };
 
-  const { handleSubmit, control, formState: { errors }, getValues } = useForm();
+  const { handleSubmit, control, formState: { errors }, getValues } = useForm(
+    {
+      defaultValues: {
+        mobile: '',
+        name: '',
+      },
+    }
+  );
 
   return <Box
     sx={{
@@ -835,21 +829,21 @@ const Form2 = ({ setStage, setQuoteData }) => {
                 error={!!errors.mobile}
                 helperText={errors.mobile ? errors.mobile.message : ''}
                 inputProps={{
-                  maxLength: 10, // Example: limit the maximum length of input
+                  maxLength: 10,
                 }}
                 onInput={(e) => {
-                  e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
                 }}
               />
             )}
           />
         </Grid>
+
         <Grid item xs={12}>
-
-
           <Controller
             name="countries"
             control={control}
+            defaultValue={[]}
             rules={{
               validate: {
                 onBlur: (value) => {
@@ -857,31 +851,38 @@ const Form2 = ({ setStage, setQuoteData }) => {
                     return "Please select at least one country";
                   }
                   return true;
-                }
-              }
+                },
+              },
             }}
             render={({ field }) => (
               <Autocomplete
                 {...field}
                 onChange={(e, value) => field.onChange(value)}
                 onBlur={field.onBlur}
+                value={field.value || []}
                 fullWidth
                 multiple
                 id="checkboxes-tags-demo"
                 options={countries}
                 disableCloseOnSelect
                 getOptionLabel={(option) => option.title}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.title}
-                  </li>
-                )}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                renderOption={(props, option, { selected }) => {
+                  const key = option.id || option.title;
+                  const { key: propsKey, ...otherProps } = props;
+
+                  return (
+                    <li key={key} {...otherProps}>
+                      <Checkbox
+                        icon={icon}
+                        checkedIcon={checkedIcon}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                      />
+                      {option.title}
+                    </li>
+                  );
+                }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -894,7 +895,21 @@ const Form2 = ({ setStage, setQuoteData }) => {
               />
             )}
           />
+
+
+
+
+
+
         </Grid>
+
+
+
+
+
+
+
+
         <Grid item xs={12} sm={6}>
           <Controller
             name="startDate"
@@ -956,15 +971,11 @@ const Form2 = ({ setStage, setQuoteData }) => {
           />
         </Grid>
 
-
-
-
-
         <Grid item xs={12}>
           <Controller
             name="ped"
             control={control}
-            defaultValue={false} // Default unchecked state
+            defaultValue={false}
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox {...field} value="remember" color="primary" />}
@@ -985,7 +996,7 @@ const Form2 = ({ setStage, setQuoteData }) => {
         </Grid>
         <Grid item xs={12}>
           {startDateValue && endDateValue && (
-            <Typography variant="body1">
+            <Typography variant="body1" textAlign="center">
               Number of days: {calculateDays()}
             </Typography>
           )}
@@ -1012,6 +1023,7 @@ const Form2 = ({ setStage, setQuoteData }) => {
           endIcon={<ArrowForwardRoundedIcon />}
           type="submit"
           variant="contained"
+            color='info'
         >
           Next
         </Button>

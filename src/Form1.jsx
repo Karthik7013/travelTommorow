@@ -3,7 +3,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import ArrowForwardRoundedIcon from "@mui/icons-material/ArrowForwardRounded";
 
-const Form1 = ({ setStage,setQuoteData }) => {
+const Form1 = ({ setStage, setQuoteData }) => {
     const [travellerCount, setTravellerCount] = React.useState(1);
     const {
         handleSubmit,
@@ -93,7 +93,7 @@ const Form1 = ({ setStage,setQuoteData }) => {
                                                     MenuProps={{
                                                         PaperProps: {
                                                             style: {
-                                                                maxHeight: 200, // Adjust as needed
+                                                                maxHeight: 200,
                                                             },
                                                         },
                                                         anchorOrigin: {
@@ -104,7 +104,6 @@ const Form1 = ({ setStage,setQuoteData }) => {
                                                             vertical: "top",
                                                             horizontal: "left",
                                                         },
-                                                        getContentAnchorEl: null,
                                                     }}
                                                 >
                                                     <MenuItem value="" disabled>
@@ -135,7 +134,7 @@ const Form1 = ({ setStage,setQuoteData }) => {
                         endIcon={<ArrowForwardRoundedIcon />}
                         type="submit"
                         variant="contained"
-
+                        color='info'
                     >
                         Next
                     </Button>
