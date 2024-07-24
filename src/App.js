@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import img1 from "./assets/Travel_landing.svg";
+import img2 from "./assets/Travel_insurance_coverage.svg";
+import Form2 from "./Form2";
+import Form1 from "./Form1";
 
-function App() {
+export default function App() {
+  const [quoteData, setQuoteData] = React.useState({});
+  const [stage, setStage] = React.useState(false);
+
+  console.log(quoteData,'quottt');
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid
+        item
+        xs={false}
+        md={6}
+        sx={{
+          backgroundImage: `url(${stage ? img1 : img2})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "left",
+        }}
+      />
+      <Grid
+        item
+        padding={2}
+        xs={12}
+        md={6}
+        component={Paper}
+        elevation={6}
+        square
+      >
+        {!stage && <Form1 setStage={setStage} setQuoteData={setQuoteData}  />}
+        {stage && <Form2  setStage={setStage} setQuoteData={setQuoteData} />}
+      </Grid>
+    </Grid>
   );
 }
-
-export default App;
